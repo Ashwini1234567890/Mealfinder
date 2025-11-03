@@ -1,0 +1,183 @@
+.header {
+    display: flex;
+    background-color: rgb(255, 136, 0);
+    padding-left: 50px;
+    position: fixed;
+    width: 95.5%;
+    top: 0;
+    z-index: 999;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.logo p {
+    color: white;
+    font-weight: bold;
+}
+
+.header .hamlogo {
+    margin-top: 15px;
+    margin-left: 1200px;
+}
+
+.image img {
+    height: 300px;
+    width: 100%;
+}
+
+.image {
+    background-image:linear-gradient(rgba(0,0,0,0.6)) ,url("./assets/images/header_image.1dc0f346d407fc577d16.jpg");
+    background-size: cover;
+    background-position: center;
+    text-align: center;
+    padding: 100px 20px;
+    color: white;
+    height: 100px;
+    position: relative;
+}
+
+.image img {
+    height: 700px;
+}
+
+.search input {
+    height: 40px;
+    width: 200px;
+    border-radius: 50px;
+    border: none;
+    color: rgb(107, 105, 105);
+    background-color: white;
+    padding-left: 20px;
+}
+
+.search i {
+    color: white;
+}
+
+.search i:hover {
+    background-color: white;
+    color: rgb(255, 136, 0);
+}
+
+.search i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid white;
+    height: 40px;
+    width: 40px;
+    border-radius: 50px;
+    background-color: rgb(255, 136, 0);
+}
+
+.search {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.imagesearch {
+    position: relative;
+}
+
+.searchpara {
+    position: absolute;
+    left: 600px;
+    top: 90px;
+}
+
+.para p,
+h2 {
+    color: white;
+}
+
+.search input {
+    margin-left: 50px;
+}
+
+.para p {
+    margin-left: 40px;
+}
+
+.catlist {
+    margin: 0;
+    background-color: #f5f5f5;
+    height: 650px;
+
+}
+
+.categories {
+    margin-left: 70px;
+    display: inline-block;
+    text-align: left;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #111;
+    margin-top: 30px;
+    margin-left: 30px;
+    margin-bottom: 5px;
+}
+
+.underline {
+    width: 70px;
+    height: 4px;
+    margin-left: 100px;
+    background-color: rgb(255, 136, 0);
+}
+
+.list img {
+    padding: 10px;
+    height: 150px;
+    width: 200px;
+}
+
+.list {
+    margin-left: 70px;
+    margin-top: 20px;
+    padding: 40px;
+    display: flex;
+    width: 90%;
+    gap: 30px;
+    height: 400px;
+    flex-wrap: wrap;
+}
+
+.listimage img:hover {
+    transform: scale(0.8);
+}
+
+.list p {
+    border: 1px solid rgb(255, 136, 0);
+    border-radius: 5px;
+    width: fit-content;
+    background-color: rgb(255, 136, 0);
+    color: white;
+    text-align: center;
+    padding: 4px 10px;
+}
+
+.listimage {
+    position: relative;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.listimage img {
+    height: auto;
+}
+
+.food {
+    position: absolute;
+    top: -6px;
+    right: 6px;
+    font-size: small;
+}
