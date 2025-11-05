@@ -1,4 +1,4 @@
-.header {
+    .header {
     display: flex;
     background-color: rgb(255, 136, 0);
     padding-left: 50px;
@@ -30,7 +30,8 @@
 }
 
 .image {
-    background-image:linear-gradient(rgba(0,0,0,0.6)) ,url("./assets/images/header_image.1dc0f346d407fc577d16.jpg");
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6)),
+        url("./assets/images/header_image.1dc0f346d407fc577d16.jpg");
     background-size: cover;
     background-position: center;
     text-align: center;
@@ -52,15 +53,7 @@
     color: rgb(107, 105, 105);
     background-color: white;
     padding-left: 20px;
-}
-
-.search i {
-    color: white;
-}
-
-.search i:hover {
-    background-color: white;
-    color: rgb(255, 136, 0);
+    margin-left: 50px;
 }
 
 .search i {
@@ -72,6 +65,12 @@
     width: 40px;
     border-radius: 50px;
     background-color: rgb(255, 136, 0);
+    color: white;
+}
+
+.search i:hover {
+    background-color: white;
+    color: rgb(255, 136, 0);
 }
 
 .search {
@@ -95,19 +94,14 @@ h2 {
     color: white;
 }
 
-.search input {
-    margin-left: 50px;
-}
-
 .para p {
     margin-left: 40px;
 }
 
 .catlist {
     margin: 0;
-    background-color: #f5f5f5;
+    background-color: white;
     height: 650px;
-
 }
 
 .categories {
@@ -133,12 +127,6 @@ h2 {
     background-color: rgb(255, 136, 0);
 }
 
-.list img {
-    padding: 10px;
-    height: 150px;
-    width: 200px;
-}
-
 .list {
     margin-left: 70px;
     margin-top: 20px;
@@ -148,6 +136,23 @@ h2 {
     gap: 30px;
     height: 400px;
     flex-wrap: wrap;
+}
+
+.list img {
+    padding: 10px;
+    height: 150px;
+    width: 200px;
+}
+
+.listimage {
+    position: relative;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.listimage img {
+    height: auto;
 }
 
 .listimage img:hover {
@@ -164,20 +169,111 @@ h2 {
     padding: 4px 10px;
 }
 
-.listimage {
-    position: relative;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.listimage img {
-    height: auto;
-}
-
 .food {
     position: absolute;
     top: -6px;
     right: 6px;
     font-size: small;
+}
+
+
+/* Dropdown Slide Menu */
+.dropdown-menu {
+  position: fixed;
+  top: 0;
+  right: -300px;
+  width: 250px;
+  height: 100%;
+  background-color: white;
+  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.2);
+  transition: right 0.4s ease;
+  z-index: 1000;
+  padding-top: 20px;
+}
+
+.dropdown-menu.show {
+  right: 0;
+}
+
+.dropdown-menu .close-btn {
+  font-size: 28px;
+  color: rgb(255, 136, 0);
+  text-align: right;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.dropdown-list {
+  list-style: none;
+  padding: 10px 20px;
+  margin: 0;
+}
+
+.dropdown-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  color: #333;
+  font-size: 16px;
+}
+
+.dropdown-list li:hover {
+  background-color: rgb(255, 136, 0);
+  color: white;
+  border-radius: 4px;
+  padding-left: 10px;
+}
+
+.listimage {
+  text-align: center;
+  width: 200px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 10px;
+  transition: transform 0.3s;
+}
+
+.listimage img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.listimage:hover {
+  transform: scale(1.05);
+}
+
+/* Meal grid stays separate from description box */
+.meals-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  margin: 20px auto 50px auto;     /* spacing below the description */
+  width: 90%;
+}
+
+
+.category-description {
+  width: 100%;
+  margin: auto;
+  padding: -35px 20px;
+  text-align: center;
+}
+
+.category-description h2 {
+  color: rgb(255, 136, 0);
+  margin-bottom: 15px;
+}
+
+/* FIXED whitesmoke box */
+.category-description p {
+  background-color: whitesmoke;
+  
+  border-radius: 10px;
+  color: #333;
+  line-height: 1.6;
+  text-align: justify;
+  max-width: auto;           /* limits paragraph width neatly */
+  margin-top: auto;             /* centers it */
 }
