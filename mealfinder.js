@@ -27,7 +27,7 @@
       listContainer.innerHTML = "";
       menuList.innerHTML = "";
 
-      allCategories.forEach(cat => {
+      allCategories.forEach(cat =>  {
         listContainer.innerHTML += `
           <div class="relative bg-white rounded-xl shadow-md text-center p-3 hover:scale-105 transition cursor-pointer w-[200px]"
             onclick="showCategoryMeals('${cat.strCategory}')">
