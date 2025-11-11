@@ -1,129 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meal Finder</title>
-    <link rel="stylesheet" href="./mealfinder.css">
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
-        integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meal Finder</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"/>
 </head>
 
-<body>
-    <div class="header">
-        <div class="logo">
-            <i class="fa-solid fa-utensils" style="color: white"></i>
-            <p>MealFinder.</p>
-        </div>
-        <div class="hamlogo">
-            <i class="fa-solid fa-bars" style="color: white"></i>
-        </div>
+<body class="bg-white font-sans">
+
+  <!-- HEADER -->
+  <header class="flex bg-orange-500 px-12 py-4 fixed top-0 w-[100%] z-[999] justify-between items-center">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-utensils text-white text-2xl"></i>
+      <p class="text-white font-bold text-lg">MealFinder.</p>
     </div>
-<br>
-    <div class="imagesearch">
-        <div class="image">
-            <!-- <img src="./assets/images/header_image.1dc0f346d407fc577d16.jpg" alt="restro-image"> -->
-        </div>
-        <div class="searchpara">
-            <div class="search">
-                <input type="text" placeholder="Search recipes here...">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </div>
-            <div class="para">
-                <p>
-                    <h2>What are your favorite cuisines?</h2>
-                </p>
-                <p>PERSONALIZE YOUR EXPERIENCE</p>
-            </div>
-        </div>
+    <div class="text-white text-2xl cursor-pointer hamlogo" id="menuButton">
+      <i class="fa-solid fa-bars"></i>
     </div>
+  </header>
 
-    <div class="catlist">
-        <div class="categories">
-            <p class="section-title">CATEGORIES</p>
+  <!-- HERO IMAGE -->
+  <section class="relative mt-[80px]">
+    <div
+      class="bg-[url('https://www.themealdb.com/images/media/meals/llcbn01574260722.jpg')] bg-cover bg-center text-center text-white h-[300px] flex flex-col justify-center items-center relative">
+      <div class="absolute inset-0 bg-black/50"></div>
+      <div class="relative z-10">
+        <div class="flex items-center justify-center gap-2 mb-4">
+          <input type="text" placeholder="Search recipes here..."
+            class="h-10 w-64 rounded-full border-none pl-4 text-gray-700 outline-none" id="searchInput" />
+          <button
+            class="flex items-center justify-center bg-orange-500 hover:bg-white hover:text-orange-500 text-white h-10 w-10 rounded-full transition"
+            id="searchIcon">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
         </div>
-        <div class="underline"></div>
-
-        <div class="list">
-            <div class="listimage">
-                <img src="./assets/images/beef.png" alt="beefimg">
-                <p class="food">BEEF</p>
-            </div>
-
-            <div class="listimage">
-                <img src="./assets/images/chicken.png" alt="chickenimg">
-                <p class="food">CHICKEN</p>
-            </div>
-
-            <div class="listimage">
-                <img src="./assets/images/dessert.png" alt="dessertimg">
-                <p class="food">DESSERT</p>
-            </div>
-
-            <div class="listimage">
-                <img src="./assets/images/lamb.png" alt="lambimg">
-                <p class="food">LAMB</p>
-            </div>
-
-            <div class="listimage">
-                <img src="./assets/images/miscellaneous.png" alt="misimg">
-                <p class="food">MISCELLANEOUS</p>
-            </div>
-
-            <div class="listimage">
-                <img src="./assets/images/pasta.png" alt="pastaimg">
-                <p class="food">PASTA</p>
-            </div>
-
-            <div class="listimage">
-                <img src="./assets/images/pork.png" alt="porkimg">
-                <p class="food">PORK</p>
-            </div>
-
-            <div class="listimage">
-                <img src="./assets/images/seafood.png" alt="seaimg">
-                <p class="food">SEAFOOD</p>
-            </div>
-
-            <div class="listimage">
-                <img src="./assets/images/side.png" alt="sideimg">
-                <p class="food">SIDE</p>
-            </div>
-
-            <div class="listimage">
-                <img src="./assets/images/starter.png" alt="starterimg">
-                <p class="food">STARTER</p>
-            </div>
-
-            <div class="listimage">
-                <img src="./assets/images/vegan.png" alt="veganimg">
-                <p class="food">VEGAN</p>
-            </div>
-
-            <div class="listimage">
-                <a href="./veg.html">
-                    <img src="./assets/images/vegetarian.png" alt="vegimg">
-                </a>
-                <p class="food">VEGETARIAN</p>
-            </div>
-
-            <div class="listimage">
-                <img src="./assets/images/breakfast.png" alt="bfimg">
-                <p class="food">BREAKFAST</p>
-            </div>
-
-            <div class="listimage">
-                <img src="./assets/images/goat.png" alt="goatimg">
-                <p class="food">GOAT</p>
-            </div>
-        </div>
+        <h2 class="text-2xl font-semibold">What are your favorite cuisines?</h2>
+        <p class="text-white mt-2 tracking-wider">PERSONALIZE YOUR EXPERIENCE</p>
+      </div>
     </div>
+  </section>
+
+  <!-- CATEGORY SECTION -->
+  <section class="bg-white py-10">
+    <div class="ml-20">
+      <h2 class="text-2xl font-bold tracking-wide text-gray-800">CATEGORIES</h2>
+      <div class="w-16 h-1 bg-orange-500 mt-2 mb-6"></div>
+    </div>
+    <div id="listContainer"
+      class="flex flex-wrap justify-center gap-8 px-10 pb-10">
+    </div>
+  </section>
+
+  <!-- DROPDOWN MENU -->
+  <div id="dropdownMenu"
+    class="fixed top-0 right-[-300px] w-[250px] h-full bg-white shadow-lg transition-all duration-500 ease-in-out z-[1000] p-5">
+    <div class="text-right text-orange-500 text-3xl font-bold cursor-pointer" id="closeMenu">&times;</div>
+    <ul id="menuList" class="mt-4 text-gray-700 text-lg space-y-3"></ul>
+  </div>
+
+
 </body>
 <script src="./mealfinder.js"></script>
-
 </html>
-
-
