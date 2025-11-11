@@ -1,271 +1,195 @@
 
-// Meal Finder JavaScript
+    const CATEGORY_API = "https://www.themealdb.com/api/json/v1/1/categories.php";
+    const FILTER_API = "https://www.themealdb.com/api/json/v1/1/filter.php?c=";
+    const SEARCH_API = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
+    const MEAL_DETAIL_API = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
 
+    const listContainer = document.getElementById("listContainer");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+    const menuButton = document.getElementById("menuButton");
+    const closeMenu = document.getElementById("closeMenu");
+    const menuList = document.getElementById("menuList");
+    const searchInput = document.getElementById("searchInput");
+    const searchIcon = document.getElementById("searchIcon");
 
-// API URLs
-const CATEGORY_API = "https://www.themealdb.com/api/json/v1/1/categories.php";
-const FILTER_API = "https://www.themealdb.com/api/json/v1/1/filter.php?c=";
-const SEARCH_API = "https://www.themealdb.com/api/json/v1/1/search.php?s=";
-const MEAL_DETAIL_API = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
+    let allCategories = [];
 
-// Select elements
-const hamLogo = document.querySelector(".hamlogo");
-const searchInput = document.querySelector(".search input");
-const searchIcon = document.querySelector(".search i");
-const listContainer = document.querySelector(".list");
-//  Create Dropdown Menu
+    // Toggle dropdown
+    menuButton.addEventListener("click", () => dropdownMenu.classList.toggle("right-0"));
+    closeMenu.addEventListener("click", () => dropdownMenu.classList.remove("right-0"));
 
-const dropdown = document.createElement("div");
-dropdown.classList.add("dropdown-menu");
-dropdown.innerHTML = `
-  <div class="close-btn">&times;</div>
-  <ul class="dropdown-list"></ul>
-`;
-document.body.appendChild(dropdown);
+    // Load all categories
+    async function loadCategories() {
+      const res = await fetch(CATEGORY_API);
+      const data = await res.json();
+      allCategories = data.categories;
 
-// Toggle dropdown
-hamLogo.addEventListener("click", () => {
-  dropdown.classList.toggle("show");
-});
+      listContainer.innerHTML = "";
+      menuList.innerHTML = "";
 
-// Close dropdown
-dropdown.querySelector(".close-btn").addEventListener("click", () => {
-  dropdown.classList.remove("show");
-});
+      allCategories.forEach(cat => {
+        listContainer.innerHTML += `
+          <div class="relative bg-white rounded-xl shadow-md text-center p-3 hover:scale-105 transition cursor-pointer w-[200px]"
+            onclick="showCategoryMeals('${cat.strCategory}')">
+            <img src="${cat.strCategoryThumb}" alt="${cat.strCategory}" class="rounded-lg w-full h-[150px] object-cover mb-2">
+            <p class="absolute top-[-10px] right-2 bg-orange-500 text-white text-xs font-semibold px-2 py-1 rounded">${cat.strCategory}</p>
+          </div>`;
 
-let allCategories = [];
+        menuList.innerHTML += `
+          <li class="hover:bg-orange-100 px-2 py-1 cursor-pointer rounded"
+              onclick="showCategoryMeals('${cat.strCategory}'); dropdownMenu.classList.remove('right-0');">
+              ${cat.strCategory}
+          </li>`;
+      });
+    }
 
-//  Load Categories into Dropdown
+    // Show category meals
+    async function showCategoryMeals(categoryName) {
+      const res = await fetch(FILTER_API + categoryName);
+      const data = await res.json();
+      const meals = data.meals;
 
-async function loadCategories() {
-  const res = await fetch(CATEGORY_API);
-  const data = await res.json();
-  allCategories = data.categories;
-
-  const ul = dropdown.querySelector(".dropdown-list");
-  ul.innerHTML = "";
-
-  // Create list items for dropdown
-  allCategories.forEach(cat => {
-    const li = document.createElement("li");
-    li.textContent = cat.strCategory;
-    li.addEventListener("click", async () => {
-      dropdown.classList.remove("show");
-      await showCategoryMeals(cat.strCategory);
-    });
-    ul.appendChild(li);
-  });
-
-  // Attach click event to category cards on home
-  document.querySelectorAll(".listimage").forEach(card => {
-    card.addEventListener("click", async () => {
-      const catName = card.querySelector(".food").textContent.trim();
-      await showCategoryMeals(catName);
-    });
-  });
-}
-
-
-//  Show Meals by Category
-
-async function showCategoryMeals(categoryName) {
-  document.querySelector(".section-title").textContent = categoryName.toUpperCase();
-
-  //  Get the description for the selected category
-  let categoryDescription = "";
-  if (allCategories.length > 0) {
-    const selectedCat = allCategories.find(
-      cat => cat.strCategory.toLowerCase() === categoryName.toLowerCase()
-    );
-    if (selectedCat) categoryDescription = selectedCat.strCategoryDescription;
-  } else {
-    // Fallback in case categories not yet loaded
-    const resCat = await fetch(CATEGORY_API);
-    const dataCat = await resCat.json();
-    const selectedCat = dataCat.categories.find(
-      cat => cat.strCategory.toLowerCase() === categoryName.toLowerCase()
-    );
-    if (selectedCat) categoryDescription = selectedCat.strCategoryDescription;
-  }
-
-  //  Fetch meals for that category
-  const res = await fetch(FILTER_API + categoryName);
-  const data = await res.json();
-  const meals = data.meals;
-
-  // Display category description
-  listContainer.innerHTML = `
-    <div class="category-description">
-      <h2>${categoryName}</h2>
-      <p>${categoryDescription || `Explore delicious ${categoryName} dishes below!`}</p>
-    </div>
-    <div class="meals-grid"></div>
-  `;
-
-  const grid = listContainer.querySelector(".meals-grid");
-
-  // Render meal cards
-  meals.forEach(meal => {
-    const div = document.createElement("div");
-    div.classList.add("listimage");
-    div.innerHTML = `
-      <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
-      <p class="food">${meal.strMeal}</p>
-    `;
-    div.addEventListener("click", () => showMealDetails(meal.idMeal)); 
-    grid.appendChild(div);
-  });
-}
-
-
-//  Search Meals
-
-async function fetchMealsBySearch(query) {
-  const res = await fetch(SEARCH_API + query);
-  const data = await res.json();
-  if (data.meals) {
-    displayMeals(data.meals, `Search results for "${query}"`);
-  } else {
-    listContainer.innerHTML = `<p style="margin-left:70px; font-size:1.2rem;">No meals found for "${query}"</p>`;
-  }
-}
-
-// Display meals for search results
-function displayMeals(meals, titleText) {
-  document.querySelector(".section-title").textContent = titleText.toUpperCase();
-  listContainer.innerHTML = `<div class="meals-grid"></div>`;
-  const grid = listContainer.querySelector(".meals-grid");
-
-  meals.forEach(meal => {
-    const div = document.createElement("div");
-    div.classList.add("listimage");
-    div.innerHTML = `
-      <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
-      <p class="food">${meal.strMeal}</p>
-    `;
-    div.addEventListener("click", () => showMealDetails(meal.idMeal));
-    grid.appendChild(div);
-  });
-}
-
-// Search events
-searchIcon.addEventListener("click", () => {
-  const query = searchInput.value.trim();
-  if (query) fetchMealsBySearch(query);
-});
-
-searchInput.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") {
-    const query = searchInput.value.trim();
-    if (query) fetchMealsBySearch(query);
-  }
-});
-
-// Load categories on start
-loadCategories();
-
-
-// Fetch Meal Details by ID
-
-async function showMealDetails(mealId) {
-  const res = await fetch(MEAL_DETAIL_API + mealId);
-  const data = await res.json();
-  const meal = data.meals[0];
-
-  listContainer.innerHTML = `
-    <div class="meal-details-final">
-      <div class="meal-top">
-        <!-- Left side: Meal Image -->
-        <div class="meal-img-box">
-          <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+      listContainer.innerHTML = `
+        <div class="text-center w-full">
+          <h2 class="text-2xl text-orange-500 font-semibold mb-2">${categoryName}</h2>
+          <p class="bg-gray-100 rounded-lg inline-block px-6 py-3 text-gray-700 mb-5">
+            Explore delicious ${categoryName} dishes below!
+          </p>
         </div>
+        <div id="mealsGrid" class="flex flex-wrap justify-center gap-6"></div>`;
 
-        <!-- Right side: Info + Ingredients -->
-        <div class="meal-info-box">
-          <h2>${meal.strMeal}</h2>
-          <p><strong>Category:</strong> <span>${meal.strCategory}</span></p>
-          ${
-            meal.strSource
-              ? `<p><strong>Source:</strong> <a href="${meal.strSource}" target="_blank">${meal.strSource}</a></p>`
-              : ""
-          }
-          ${
-            meal.strTags
-              ? `<p><strong>Tags:</strong> <span>${meal.strTags}</span></p>`
-              : ""
-          }
+      const grid = document.getElementById("mealsGrid");
+      meals.forEach(meal => {
+        grid.innerHTML += `
+          <div class="relative bg-white rounded-xl shadow-lg hover:scale-105 transition p-3 cursor-pointer w-[200px]"
+            onclick="showMealDetails('${meal.idMeal}')">
+            <img src="${meal.strMealThumb}" alt="${meal.strMeal}" class="rounded-lg w-full h-[150px] object-cover mb-2">
+            <p class="absolute top-[-8px] right-2 bg-orange-500 text-white text-xs font-semibold px-2 py-1 rounded">${meal.strMeal}</p>
+          </div>`;
+      });
+    }
 
-          <div class="ingredients-orange-box">
-            <h3>Ingredients</h3>
-            <div class="ingredient-grid">
-              ${getIngredients(meal)
-                .map(
-                  (i, index) =>
-                    `<span><span class="ingredient-number">${
-                      index + 1
-                    }</span> ${i}</span>`
-                )
-                .join("")}
+    // Convert instructions to ✅ steps
+    function formatInstructionSteps(text) {
+      if (!text) return "";
+      const steps = text.split(/\r?\n|\.\s+/).map(s => s.trim()).filter(s => s.length > 0);
+      return steps.map(s => `
+        <div class="flex items-start gap-2 mb-2">
+          <span>✅</span>
+          <p class="text-gray-700 leading-relaxed">${s}</p>
+        </div>
+      `).join("");
+    }
+
+    // Fetch meal details by ID
+    async function showMealDetails(mealId) {
+      const res = await fetch(MEAL_DETAIL_API + mealId);
+      const data = await res.json();
+      const meal = data.meals[0];
+
+      listContainer.innerHTML = `
+        <div class="w-[90%] mx-auto my-10 bg-white rounded-xl shadow-lg p-8">
+          
+          <div class="flex flex-wrap justify-center items-start gap-10">
+            
+            <div class="w-[350px]">
+              <img src="${meal.strMealThumb}" alt="${meal.strMeal}" class="w-full h-[250px] object-cover rounded-lg shadow-md">
+            </div>
+
+            <div class="flex-1 min-w-[300px]">
+              <h2 class="text-2xl font-bold text-orange-500 mb-2">${meal.strMeal}</h2>
+              <p class="text-gray-700 mb-2"><strong>Category:</strong> ${meal.strCategory}</p>
+              ${
+                meal.strTags
+                  ? `<p class="text-gray-700 mb-2"><strong>Tags:</strong> <span class="text-orange-500">${meal.strTags}</span></p>`
+                  : ""
+              }
+
+              <div class="bg-orange-500 text-white rounded-lg p-5 mt-5">
+                <h3 class="text-lg font-semibold mb-3 border-b border-white/40 pb-1">Ingredients</h3>
+                <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                  ${getIngredients(meal)
+                    .map((i, index) => `
+                      <span class="flex items-center gap-2">
+                        <span class="bg-teal-500 w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center">${index + 1}</span>
+                        ${i}
+                      </span>`)
+                    .join("")}
+                </div>
+              </div>
             </div>
           </div>
+
+          <div class="bg-gray-100 border border-gray-200 rounded-lg p-5 mt-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">Measure:</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 text-gray-700">
+              ${getMeasures(meal).map(m => `<p>🥄 ${m}</p>`).join("")}
+            </div>
+          </div>
+
+          <div class="border border-gray-200 rounded-lg p-6 mt-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">Instructions:</h3>
+            ${formatInstructionSteps(meal.strInstructions)}
+          </div>
         </div>
-      </div>
+      `;
+    }
 
-      <!-- Measure Section -->
-      <div class="measure-box">
-        <h3>Measure:</h3>
-        <div class="measure-grid">
-          ${getMeasures(meal)
-            .map((m) => `<p>🥄 ${m}</p>`)
-            .join("")}
-        </div>
-      </div>
-
-      <!-- Instructions Section -->
-      <div class="instructions-box">
-        <h3>Instructions:</h3>
-        <ul class="instruction-list">
-          ${formatInstructions(meal.strInstructions)}
-        </ul>
-      </div>
-
-      ${
-        meal.strYoutube
-          ? `<a href="${meal.strYoutube}" target="_blank" class="youtube-link">▶ Watch on YouTube</a>`
-          : ""
+    // Helpers
+    function getIngredients(meal) {
+      const ingredients = [];
+      for (let i = 1; i <= 20; i++) {
+        const ing = meal[`strIngredient${i}`];
+        if (ing && ing.trim()) ingredients.push(ing);
       }
-      <button class="back-btn">⬅ Back to ${meal.strCategory}</button>
-    </div>
-  `;
+      return ingredients;
+    }
 
-  document.querySelector(".back-btn").addEventListener("click", async () => {
-    await showCategoryMeals(meal.strCategory);
-  });
-}
+    function getMeasures(meal) {
+      const measures = [];
+      for (let i = 1; i <= 20; i++) {
+        const m = meal[`strMeasure${i}`];
+        if (m && m.trim()) measures.push(m);
+      }
+      return measures;
+    }
 
-// Helper Functions
+    // Search
+    searchIcon.addEventListener("click", () => {
+      const query = searchInput.value.trim();
+      if (query) searchMeal(query);
+    });
 
-function getIngredients(meal) {
-  let ingredients = [];
-  for (let i = 1; i <= 20; i++) {
-    const ing = meal[`strIngredient${i}`];
-    if (ing && ing.trim()) ingredients.push(ing);
-  }
-  return ingredients;
-}
+    searchInput.addEventListener("keypress", e => {
+      if (e.key === "Enter") {
+        const query = searchInput.value.trim();
+        if (query) searchMeal(query);
+      }
+    });
 
-function getMeasures(meal) {
-  let measures = [];
-  for (let i = 1; i <= 20; i++) {
-    const measure = meal[`strMeasure${i}`];
-    if (measure && measure.trim()) measures.push(measure);
-  }
-  return measures;
-}
+    async function searchMeal(query) {
+      const res = await fetch(SEARCH_API + query);
+      const data = await res.json();
+      if (!data.meals) {
+        listContainer.innerHTML = `<p class="text-center text-lg text-red-500">No meals found for "${query}"</p>`;
+        return;
+      }
 
-// Format instructions nicely
-function formatInstructions(instructions) {
-  if (!instructions) return "";
-  const steps = instructions.split(/\r?\n|\.\s+/).filter(step => step.trim() !== "");
-  return steps.map(step => `<li>✅ ${step.trim()}</li>`).join("");
-}
+      listContainer.innerHTML = `
+        <div class="text-center w-full">
+          <h2 class="text-2xl text-orange-500 font-semibold mb-3">Results for "${query}"</h2>
+        </div>
+        <div id="mealsGrid" class="flex flex-wrap justify-center gap-6"></div>`;
+      const grid = document.getElementById("mealsGrid");
+      data.meals.forEach(meal => {
+        grid.innerHTML += `
+          <div class="relative bg-white rounded-xl shadow-lg hover:scale-105 transition p-3 cursor-pointer w-[200px]"
+            onclick="showMealDetails('${meal.idMeal}')">
+            <img src="${meal.strMealThumb}" alt="${meal.strMeal}" class="rounded-lg w-full h-[150px] object-cover mb-2">
+            <p class="absolute top-[-8px] right-2 bg-orange-500 text-white text-xs font-semibold px-2 py-1 rounded">${meal.strMeal}</p>
+          </div>`;
+      });
+    }
+
+    // Load initial categories
+    loadCategories();
